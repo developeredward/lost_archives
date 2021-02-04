@@ -1,0 +1,29 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+.hamburger {
+  display: none;
+  background: transparent;
+  border: none;
+
+  cursor: pointer;
+  .cancel {
+    transform: rotate(45deg);
+    display: none;
+    animation: cancel 0.5s linear;
+  }
+}
+body {
+  background: #000000;
+  color: #ffffff;
+}
+section,
+.all-foot {
+  padding-left: 50px;
+  padding-right: 50px;
+}
+@import "body";
+@import "animations";
+@import "responsiveness";

@@ -1,0 +1,124 @@
+{% extends 'base.html' %}{% load static %}{% block title %} LOST ARCHIVES | HOME PAGE {% endblock title %} {% block content %} {% include 'nav.html' %}
+{% block extrastyles %}
+<style>
+   video{
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+  {% endblock extrastyles %}
+  
+<!-- Section Banner -->
+<section class="banner">
+  <div class="cover">
+    <h1>Lost Archives</h1>
+    <p>Getting back in time uncovering mysteries and Histories</p>
+  </div>
+  <div class="about">
+    <a href="">Read About Us</a>
+  </div>
+</section>
+<!-- Section Blog  -->
+<section class="blog-overview">
+  <div class="heading">
+    <h1>LATEST COLLECTIONS</h1>
+  </div>
+  {% for post in latest %}
+  <div class="latest-posts">
+    <div class="card">
+      {% if not forloop.first and not forloop.last %}
+      <div class="img"><a href="{{ post.get_absolute_url }}"><img src="{{ post.thumbnail.url }}" alt="..." /></a></div>
+      {% endif %}
+      <div class="text">
+        <div class="categories" style="display: flex;">
+        {% for category in post.categories.all %}
+      <a href="" ><span class="category">| {{ category }} |</span></a>
+      {% endfor %}
+      </div>
+        <a href="{{ post.get_absolute_url }}"><h1>{{ post.title }}</h1></a>
+        <div class="description">
+          <p>{{ post.overview }}</p>
+        </div>
+        <div class="timing">
+          <p>
+            {{ post.author }} |
+            <span class="time"><i class="fa fa-clock-o" ></i> {{ post.timestamp | timesince }}</span> |
+            <span class="comment"><i class="fa fa-comment"></i>{{ post.comment_count }}</span>
+          </p>
+        </div>
+      </div>
+      {% if post.thumbnail %} {% if forloop.first or forloop.last %}
+      <div class="img"><a href="{{ post.get_absolute_url }}"><img src="{{ post.thumbnail.url }}" alt="..." /></a></div>
+      {% endif %} {% endif %}
+      <div class="empty"></div>
+    </div>
+  </div>
+  {% endfor %}
+</section>
+<!-- Show-off section -->
+<section class="showoff">
+  <div class="text">
+    <h3>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum, rem
+      inventore dolore laudantium nihil ab. A ipsa commodi dolore nesciunt.
+    </h3>
+  </div>
+</section>
+<!-- Section Most-viewed -->
+<section class="most-viewed">
+  <div class="heading">
+    <h1>Most Read Posts</h1>
+    <p>
+      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi,
+      eligendi.
+    </p>
+  </div>
+  
+  <div class="posts">
+    {% for read in most_read %}
+    <div class="card">
+      {% if read.thumbnail %}
+      <div class="img">
+        <a href="{{ read.get_absolute_url }}"><img src="{{ read.thumbnail.url }}" alt="" /></a>
+      </div>
+      {% elif read.video %}
+      <div class="img">
+        <a href="{{ read.get_absolute_url }}"><video src="{{ read.video.url }}" controls="true"></video></a>
+      </div>
+      {% endif %}
+      <div class="text">
+        <div class="timing">
+          <div class="time"><p><i class="fa fa-clock-o"></i> {{ read.timestamp | timesince }} |</p></div>
+          <div class="category">Facts</div>
+        </div>
+        <a href="{{ read.get_absolute_url }}"><h1>{{ read.title }}</h1></a>
+        <p>
+          {{ read.overview }}
+        </p>
+      </div>
+    </div>
+    
+  {% endfor %}
+  </div>
+  
+</section>
+<!-- Subscribe to our newslater -->
+<section class="subscribe">
+  <div class="text">
+    <h1>Subscribe To Newsletter</h1>
+    <p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt, aut?
+    </p>
+  </div>
+  <form method="post" class="form-group">
+    {% csrf_token %}
+  <div class="input">
+    
+    {{ form }}
+   <button type="submit" class="btn">Signup</button>
+  </form> 
+  
+</div>
+</section>
+{% include 'footer.html' %} {% endblock content %}

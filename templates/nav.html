@@ -1,0 +1,87 @@
+{% extends 'base.html' %}{% load static %} {% block content %}
+{% block extrastyles %}
+<style>
+
+  ul.n{
+			width: 100%;
+		}
+		ul.n, ul.n ul{
+			margin: 0;
+			padding: 0;
+			list-style-type: none;
+			float: left;
+		}
+		ul.n li{
+			float: left;
+			width: 10em;
+		}
+	   ul.n li ul{
+	   	width: 10em;
+	   	position: absolute;
+	   	left: -999em;
+	   }
+	   .n li:hover ul{
+	   	left: auto;
+	   }
+	   ul.n a{
+	   	display: block;
+	   	color: #ffffff;
+	   	text-decoration: none;
+	   	padding: 0.3em 1em;
+	   }
+	   ul.n li li a{
+	   	border-left: 0;
+	   	border-right:0; 
+	   }
+      ul.n li::last child{
+      	border-right: 0;
+      	border-bottom: 0;
+      }
+      .n-link{
+        background: rgb(0, 0, 0);
+        line-height: 50px;
+      }
+</style>
+{% endblock extrastyles %}
+<header class="header">
+  <div class="empty"></div>
+  <div class="icon">
+    <h3><a href="" style="color: #ffffff; text-decoration: none">Lost</a></h3>
+  </div>
+  <nav>
+    <ul class="nav-links">
+      <a href="{% url 'home' %}" class="nav-link"><li>Home</li></a>
+      <a href="{% url 'blog' %}" class="nav-link"><li>Blog</li></a>
+      <a  class="nav-link"><li></li></a>
+      {% if request.user.is_authenticated %}
+      <ul class="nav-link n" style="cursor: pointer;">
+      <li>
+          <i class="fa fa-user">&nbsp;{{ request.user }}</i>
+          <ul class="">
+            <li>
+              <a class="n-link" href="/accounts/logout">Logout</a>
+            </li>
+            <li>
+              <a class="n-link" href="#">Profile</a>
+            </li>
+            
+          </ul>
+        </li></ul>
+    </ul>
+    {% endif %}
+  </nav>
+  <div class="search-btn">
+    <div class="space">|</div>
+    <button class="search">
+      <a href=""><i class="fa fa-search"></i></a>
+    </button>
+  </div>
+  <div class="empty"></div>
+  <button class="hamburger">
+    <img src="{% static 'img/icons/nav.png' %}" class="nav-show" alt="" />
+    <img src="{% static 'img/icons/cancel.png' %}" class="cancel" alt="" />
+  </button>
+</header>
+
+
+{% endblock content %}

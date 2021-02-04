@@ -1,0 +1,42 @@
+{% extends "account/base_site.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Sign Out" %}{% endblock %}
+{% block extrastyle %}
+    <style>
+        body{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            width: 50%;
+        }
+        strong{
+            color: rgb(18, 156, 0);
+            font: italic;
+        }
+    </style>
+{% endblock extrastyle %}
+{% block content %}
+<main>
+    <div class="container">
+        <section class="mb-4">
+            <div class="row wow fadeIn">
+                <div class='col-6 offset-3'>
+                    <h1>{% trans "Sign Out" %} <strong>{{ request.user }}</strong></h1>
+
+                    <p>{% trans  'Are you sure you want to sign out?' %}</p>
+                    <form method="post" action="{% url 'account_logout' %}">
+                        {% csrf_token %}
+                        {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                        {% endif %}
+                        <button class='btn btn-primary' type="submit">{% trans 'Sign Out' %}</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %} {% load static %} {% load embed_video_tags %} {% block extrastyles %}
+<style>
+  a {
+    text-decoration: none;
+    color: #ffffff;
+  }
+  .search-results {
+    min-height: 150vh;
+  }
+  .heading > h1 {
+    letter-spacing: 3px;
+  }
+  video, iframe{
+      width: 100%;
+      height: 100%;
+  }
+</style>
+{% endblock extrastyles %} {% block content %} {% include 'nav.html' %}
+<section class="most-viewed search-results">
+  <div style="padding-top: 100px;" class="heading">
+    <h1>HERE ARE YOUR SEARCH RESULTS</h1>
+  </div>
+
+  <div class="posts">
+    {% for post in queryset %}
+    <div class="card">
+      {% if post.thumbnail %}
+      <div class="img">
+        <a href="{{ post.get_absolute_url }}"
+          ><img src="{{ post.thumbnail.url }}" alt=""
+        /></a>
+      </div>
+      {% elif post.video %}
+      <div class="img">
+        <a href="{{ post.get_absolute_url }}"
+          ><video src="{{ post.video.url }}" controls="true" alt=""
+        /></a>
+      </div>
+      {% elif post.video_url %}
+      {% video post.video_url 'small' %}
+      {% endif %}
+      <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% include 'footer.html' %} {% endblock %}
