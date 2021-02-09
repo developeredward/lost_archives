@@ -20,6 +20,7 @@
   </div>
 </section>
 <!-- Section Blog  -->
+{% if latest %}
 <section class="blog-overview">
   <div class="heading">
     <h1>LATEST COLLECTIONS</h1>
@@ -56,6 +57,7 @@
   </div>
   {% endfor %}
 </section>
+{% endif %}
 <!-- Show-off section -->
 <section class="showoff">
   <div class="text">
@@ -65,6 +67,7 @@
     </h3>
   </div>
 </section>
+{% if most_viewed %}
 <!-- Section Most-viewed -->
 <section class="most-viewed">
   <div class="heading">
@@ -103,6 +106,7 @@
   </div>
   
 </section>
+{% endif %}
 <!-- Subscribe to our newslater -->
 <section class="subscribe">
   <div class="text">
