@@ -1,0 +1,172 @@
+{% extends 'base.html' %}{% load static %} {% load embed_video_tags %} {% block extrastyles %}
+
+<link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+  integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+  crossorigin="anonymous"
+/>
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+<link rel="stylesheet" href="{% static 'css/bootstrap-grid.min.css' %}" />
+<link rel="stylesheet" href="{% static 'css/bootstrap-reboot.min.css' %}" />
+<link rel="stylesheet" href="{% static 'css/blog.css' %}" />
+<style>
+  header{
+    background: #000000;
+  }
+  a {
+    color: #ffffff;
+  }
+  .next-post,
+  .prev-post {
+    border: 1px solid #ffffff;
+    min-width: 200px;
+  }
+  .post-nav {
+    display: flex;
+  }
+  video{
+    width: 100%;
+    height: 100%;
+  }
+</style>
+{% endblock extrastyles %} 
+{% block title %} Lost Archives | Blog {% endblock title %} {% block content %} {% include 'nav.html' %}
+<section class="blog" data-aos="fade-up" data-aos-anchor-placement="top-center">
+  <div class="blog-overview" data-aos="zoom-in-up">
+    <div class="article-img col-10">
+      {% if post.thumbnail %}
+      <a href=""
+        ><img src="{{ post.thumbnail.url }}" class="img-fluid" alt=""
+      /></a>
+      {% elif post.video %}
+      <video src="{{ post.video.url }}" autoplay='true' controls='true'></video>
+      {% elif post.video_url %}
+      {% video post.video_url 'small' %}
+      {% endif %}
+    </div>
+
+    <div class="article-text">
+      {% for category in post.categories.all %}
+      <a href=""><span class="category">| {{ category }} |</span></a>
+      {% endfor %}
+      <a href=""><h1>{{ post.title }}</h1></a>
+      <span class="article-paragraph">{{ post.content | safe }}</span>
+      <div class="poster-details">
+        <p>
+          <span
+            ><img src="{{ post.author.profile_picture.url }}" style="width: 80px; height: 80px; border-radius: 100%;" alt="">{{ post.author.user.username }}|</span
+          >
+          <i class="fas fa-clock"> {{ post.timestamp | timesince }} |</i>
+          <span><i class="fa fa-comment"> {{ post.comment_count }}</i></span>
+        </p>
+      </div>
+      <div
+        class="posts-nav d-flex justify-content-around align-items-stretch flex-column flex-md-row"
+      >
+        {% if post.previous_post %}
+        <a
+          href="{{ post.previous_post.get_absolute_url }}"
+          class="prev-post text-left d-flex align-items-center justify-content-around"
+        >
+          <div class="icon prev"><i class="fa fa-angle-left"></i></div>
+          <div class="text">
+            <strong class="text-primary">Previous Post </strong>
+            <h6>{{ post.previous_post.title }}</h6>
+          </div>
+        </a>
+        {% endif %} {% if post.next_post %}
+        <a
+          href="{{ post.next_post.get_absolute_url }}"
+          class="next-post text-right d-flex align-items-center justify-content-around"
+        >
+          <div class="text">
+            <strong class="text-primary">Next Post </strong>
+            <h6>{{ post.next_post.title }}</h6>
+          </div>
+          <div class="icon next"><i class="fa fa-angle-right"> </i></div>
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="blog-navigators" data-aos="zoom-in-up">
+    <div class="search">
+      <h1>Search The Blog</h1>
+      <div class="input">
+        <input type="text" placeholder="What Are You Looking For?" /><i
+          class="fa fa-search"
+        ></i>
+      </div>
+    </div>
+
+    <div class="posts">
+      <h1>Latest Posts</h1>
+      {% for post in most_recent %}
+      <div class="post">
+        {% if post.thumbnail %}
+        <div class="img">
+          
+          <a href="{{ post.get_absolute_url }}"><img src="{{ post.thumbnail.url }}" alt="" /></a>
+          
+        </div>
+        {% endif %}
+        <div class="info">
+          <a href="{{ post.get_absolute_url }}"><h1 style="color: #8b8b8b">{{ post.title }}</h1></a>
+          <p>
+            <span><i class="fa fa-eye"></i> {{ post.view_count }} </span>
+            <span><i class="fa fa-comment"></i>{{ post.comment_count }}</span>
+          </p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="comments">
+  <div class="head-title">
+    <h2>PUBLIC COMMENTS</h2>
+  </div>
+
+  <div class="folks-comments">
+    {% for comment in post.get_comments %}
+    <div class="comment-card">
+      <div class="img" alt="">
+        {% if comment.user.author %}
+        <img src="{{ comment.post.author.profile_picture.url}}" style="width: 80px; height: 80px; border-radius: 100%;" alt=""/>
+        {% else %}
+        <img src="{% static 'img/profile-pictures/user.svg' %}" style="width: 80px; height: 80px; border-radius: 100%;" alt="" />
+        {% endif %}
+      </div>
+      <div class="text">
+        <div class="user-name d-flex justify-content-center align-content-center" style="background: #8b8b8b; width: 100%;" >
+          <h3 style="width: 100%; padding: 10px; display: flex; justify-content: center; align-items: center; flex-flow: column;">{{ comment.user.username }} <span style="font-size: 12px;" id="says">says</span></h3>
+         
+        </div>
+        <div class="statement"><p>{{ comment.comment }}</p></div>
+      </div>
+    </div>
+    <hr width="100%" style="color: #f1f1f1; border: 1px solid #d6d6d6; border-right: none;"/>
+    {% endfor %}
+  </div>
+
+  <div class="comment-box">
+    <form method="POST" action="." class="commenting-form">
+      {% csrf_token %}
+      <div class="row">
+        {% if request.user.is_authenticated %}
+        <div class="form-group col-6 text">{{ form }}</div>
+        <div class="form-group col-md-12">
+          <button type="submit" class="btn btn-danger">
+            Post Public Comment
+          </button>
+          {% else %}
+          <a href="/accounts/login" class="btn btn-danger">Login To Comment</a>
+          {% endif %}
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+{% include 'footer.html' %} {% endblock content %}
